@@ -13,7 +13,7 @@ public class ShoutingMTServer {
         Socket connection;
         try {
             ServerSocket server = new ServerSocket(PORT);
-            System.err.println("MT Server started..bring on the load, to a maximum of: " + maxnrofConnections);
+            System.err.println("MT Server started.. bring on the load, to a maximum of: " + maxnrofConnections);
 
             while (true) {
                 connection = server.accept();
