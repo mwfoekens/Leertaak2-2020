@@ -9,17 +9,17 @@ public class Queue {
         ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue();
     }
 
-    private boolean checkData(String data) {
+    boolean checkData(String data) {
         // check data, return of het in de queue in mag
         return false;
     }
 
-    private String adjustData(String data) {
+    String adjustData(String data) {
         // adjust data if checkData was false
-        return "hoi";
+        return "";
     }
 
-    private void addToQueue(String data) {
+    void addToQueue(String data) {
         if (checkData(data)) {
             queue.add(data);
         } else {
@@ -27,7 +27,12 @@ public class Queue {
         }
     }
 
-    private int queueLength() {
-        return queue.size();
+    boolean isEmpty() {
+        return queue.isEmpty();
+    }
+
+    String getData() {
+        return queue.poll();
+
     }
 }

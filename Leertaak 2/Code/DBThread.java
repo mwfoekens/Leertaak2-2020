@@ -1,34 +1,35 @@
 package Code;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.Properties;
 
 public class DBThread implements Runnable {
-    Queue queue = new Queue();
-    Connection c;
-    private final String url = "jdbc:postgresql://localhost:54061/undwmi";
-    private final String user = "postgres";
-    private final String password = "hoi";
+    private Queue queue = new Queue();
+    private Connection c;
 
     public DBThread() {
+        String url = "jdbc:postgresql://localhost/unwdmi";
+        Properties props = new Properties();
+        props.setProperty("user", "postgres");
+        props.setProperty("password", "hoi");
+        props.setProperty("ssl", "false");
         try {
             Class.forName("org.postgresql.Driver");
-            System.out.println("test");
-            c = DriverManager.getConnection(url, user, password);
-            System.out.println("123");
-            System.out.print(c);
+            c = DriverManager.getConnection(url, props);
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Opened database successfully");
+        System.out.println("\nOpened database successfully");
     }
 
     @Override
     public void run() {
-
+        while (!queue.isEmpty()) {
+            String toBeAdded = null;
+            toBeAdded = queue.getData();
+            // DB shenanigans
+        }
     }
 }
-
