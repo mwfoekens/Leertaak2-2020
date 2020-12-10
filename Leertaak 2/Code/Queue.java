@@ -26,4 +26,8 @@ public class Queue {
             queue.add(adjustData(data));
         }
     }
+
+    private int queueLength() {
+        return queue.size();
+    }
 }
