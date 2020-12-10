@@ -2,6 +2,8 @@ package Code;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 public class ShoutingMTServer {
     public static final int PORT = 2500;
@@ -20,6 +22,7 @@ public class ShoutingMTServer {
                 System.err.println("New connection accepted..handing it over to worker thread");
                 Thread worker = new Thread(new Worker(connection));
                 worker.start();
+
             }
         } catch (java.io.IOException ioe) {
         }

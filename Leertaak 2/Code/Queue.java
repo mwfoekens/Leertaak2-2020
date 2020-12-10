@@ -5,8 +5,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class Queue {
     ConcurrentLinkedQueue<String> queue;
 
-    public Queue() {
-        ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue();
+    public Queue(){
+        ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<String>();
     }
 
     private boolean checkData(String data) {
