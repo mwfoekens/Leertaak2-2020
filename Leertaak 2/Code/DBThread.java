@@ -9,7 +9,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class DBThread implements Runnable {
-    private final BlockingQueue<String> queue = new LinkedBlockingQueue<>();
+    public final BlockingQueue<Measurement> queue = new LinkedBlockingQueue<>();
     private Connection connection;
     public boolean running = true;
 
@@ -35,9 +35,14 @@ public class DBThread implements Runnable {
         try {
             Statement statement = connection.createStatement();
             while (running) {
-                String values = queue.take();
-                statement.executeUpdate("insert into measurements (stn, \"date\", \"time\", \"temp\", dewp, stp, slp, visib, wdsp, prcp, sndp, frshtt, cldc, wnddir)\n" +
-                        "values " + values + ";");
+                Measurement values = queue.take();
+                statement.executeUpdate("insert into measurements " +
+                        "(stn, \"date\", \"time\", \"temp\", dewp, stp, slp, visib, wdsp, prcp, sndp, frshtt, cldc, wnddir) " +
+                        "values (" + values.getStn() + ", '" + values.getDate() + "', '" + values.getTime() + "', " + values.getTemp() + ", "
+                        + values.getDewp() + ", " + values.getStp() + ", " + values.getSlp() + ", " + values.getVisib() + ", "
+                        + values.getWdsp() + ", " + values.getPrcp() + ", " + values.getSndp() + ", '" + values.getFrshtt()
+                        + "', " + values.getCldc() + ", " + values.getWnddir() + ");");
+
             }
         } catch (SQLException | InterruptedException throwables) {
             throwables.printStackTrace();

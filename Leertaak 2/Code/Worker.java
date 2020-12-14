@@ -15,12 +15,14 @@ class Worker implements Runnable {
     private BufferedReader bufferedReader;
     private JAXBContext jaxbContext;
     private Unmarshaller jaxbUnmarshaller;
+    private DBThread dbThread;
 
-    public Worker(Socket connection) throws JAXBException, IOException {
+    public Worker(Socket connection, DBThread dbThread) throws JAXBException, IOException {
         this.connection = connection;
         this.bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         this.jaxbContext = JAXBContext.newInstance(WeatherData.class);
         this.jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        this.dbThread = dbThread;
     }
 
     @Override
@@ -41,6 +43,7 @@ class Worker implements Runnable {
                         //System.out.println(q); // TODO zet op queue
                         for (int i = 0; i < q.getMeasurements().size(); i++) {
                             correctIfEmpty(q.getMeasurements().get(i));
+                            dbThread.queue.add(q.getMeasurements().get(i));
                         }
                     }
                     builder = new StringBuilder();
@@ -50,7 +53,10 @@ class Worker implements Runnable {
             WeatherData q = getWeatherData(builder);
             for (int i = 0; i < q.getMeasurements().size(); i++) {
                 correctIfEmpty(q.getMeasurements().get(i));
+                dbThread.queue.add(q.getMeasurements().get(i));
             }
+
+
             //System.out.println(q); // TODO zet op queue
 
             // now close the socket connection

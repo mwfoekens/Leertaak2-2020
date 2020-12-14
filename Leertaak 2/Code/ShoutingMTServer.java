@@ -12,15 +12,16 @@ public class ShoutingMTServer {
 
     public static void main(String[] args) throws JAXBException, IOException {
         Socket connection;
-        Thread dbThread = new Thread(new DBThread());
+        DBThread dbQueue = new DBThread();
+        Thread dbThread = new Thread(dbQueue);
         dbThread.start();
         ServerSocket server = new ServerSocket(PORT);
-        System.err.println("MT Server started.. bring on the load, to a maximum of: " + maxnrofConnections);
+        System.err.println("MT Server started. Maximum amount of threads: " + maxnrofConnections);
 
         while (true) {
             connection = server.accept();
             System.err.println("New connection accepted..handing it over to worker thread");
-            Thread worker = new Thread(new Worker(connection));
+            Thread worker = new Thread(new Worker(connection, dbQueue));
             worker.start();
         }
     }
