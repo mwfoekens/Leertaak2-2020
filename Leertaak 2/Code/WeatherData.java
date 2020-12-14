@@ -13,7 +13,6 @@ public class WeatherData {
     }
 
     public WeatherData() {
-
     }
 
     @XmlElement(name = "MEASUREMENT")

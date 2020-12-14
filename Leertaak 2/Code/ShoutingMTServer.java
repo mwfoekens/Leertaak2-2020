@@ -1,25 +1,19 @@
 package Code;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import java.io.*;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class ShoutingMTServer {
     public static final int PORT = 2500;
-    private static final int maxnrofConnections = 1;
+    private static final int maxnrofConnections = 800;
     public static TelSemafoor mijnSemafoor = new TelSemafoor(maxnrofConnections);
 
-
-    public static void main(String[] args) throws InterruptedException, JAXBException, IOException {
+    public static void main(String[] args) throws JAXBException, IOException {
         Socket connection;
-//        Thread dbThread = new Thread(new DBThread());
-//        dbThread.start();
+        Thread dbThread = new Thread(new DBThread());
+        dbThread.start();
         ServerSocket server = new ServerSocket(PORT);
         System.err.println("MT Server started.. bring on the load, to a maximum of: " + maxnrofConnections);
 

@@ -1,6 +1,9 @@
 package Code;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -24,7 +27,7 @@ public class DBThread implements Runnable {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("\nOpened database successfully");
+        System.err.println("\nOpened database successfully.");
     }
 
     @Override
@@ -40,5 +43,4 @@ public class DBThread implements Runnable {
             throwables.printStackTrace();
         }
     }
-
 }
