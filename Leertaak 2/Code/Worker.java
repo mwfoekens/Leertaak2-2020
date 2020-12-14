@@ -40,7 +40,6 @@ class Worker implements Runnable {
                 if (line.startsWith("<?xml")) {
                     if (builder != null) {
                         WeatherData q = getWeatherData(builder);
-                        //System.out.println(q); // TODO zet op queue
                         for (int i = 0; i < q.getMeasurements().size(); i++) {
                             correctIfEmpty(q.getMeasurements().get(i));
                             dbThread.queue.add(q.getMeasurements().get(i));
@@ -55,9 +54,6 @@ class Worker implements Runnable {
                 correctIfEmpty(q.getMeasurements().get(i));
                 dbThread.queue.add(q.getMeasurements().get(i));
             }
-
-
-            //System.out.println(q); // TODO zet op queue
 
             // now close the socket connection
             connection.close();
