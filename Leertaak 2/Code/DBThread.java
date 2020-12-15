@@ -34,6 +34,7 @@ public class DBThread implements Runnable {
     public void run() {
         try {
             Statement statement = connection.createStatement();
+
             while (running) {
                 Measurement values = queue.take();
                 statement.executeUpdate("insert into measurements " +
@@ -42,7 +43,6 @@ public class DBThread implements Runnable {
                         + values.getDewp() + ", " + values.getStp() + ", " + values.getSlp() + ", " + values.getVisib() + ", "
                         + values.getWdsp() + ", " + values.getPrcp() + ", " + values.getSndp() + ", '" + values.getFrshtt()
                         + "', " + values.getCldc() + ", " + values.getWnddir() + ");");
-
             }
         } catch (SQLException | InterruptedException throwables) {
             throwables.printStackTrace();

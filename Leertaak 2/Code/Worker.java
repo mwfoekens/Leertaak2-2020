@@ -28,10 +28,9 @@ class Worker implements Runnable {
     @Override
     public void run() {
         try {
-            String s;
             System.err.println("New worker thread started");
 
-            //lets check if we already accepted maximum number of connections
+            //check if maximum number of connections reached
             ShoutingMTServer.mijnSemafoor.probeer();
 
             StringBuilder builder = null;
@@ -40,28 +39,30 @@ class Worker implements Runnable {
                 if (line.startsWith("<?xml")) {
                     if (builder != null) {
                         WeatherData q = getWeatherData(builder);
-                        for (int i = 0; i < q.getMeasurements().size(); i++) {
-                            correctIfEmpty(q.getMeasurements().get(i));
-                            dbThread.queue.add(q.getMeasurements().get(i));
-                        }
+                        addToQueue(q);
                     }
                     builder = new StringBuilder();
                 }
                 builder.append(line);
             }
             WeatherData q = getWeatherData(builder);
-            for (int i = 0; i < q.getMeasurements().size(); i++) {
-                correctIfEmpty(q.getMeasurements().get(i));
-                dbThread.queue.add(q.getMeasurements().get(i));
-            }
+            addToQueue(q);
 
             // now close the socket connection
             connection.close();
             System.err.println("Connection closed: workerthread ending");
             // upping the semaphore.. since the connnection is gone....
             ShoutingMTServer.mijnSemafoor.verhoog();
-        } catch (IOException | InterruptedException | JAXBException ioe) {
-            System.err.println("err");
+        } catch (IOException | InterruptedException | JAXBException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addToQueue(WeatherData q) {
+        for (int i = 0; i < q.getMeasurements().size(); i++) {
+            Measurement item = q.getMeasurements().get(i);
+            correctIfEmpty(item);
+            dbThread.queue.add(item);
         }
     }
 
